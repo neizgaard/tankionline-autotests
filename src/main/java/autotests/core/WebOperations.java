@@ -152,7 +152,7 @@ public final class WebOperations {
             throw new IllegalStateException("Can't hover element because it's not accessible" + element);
         }
         actions.moveToElement(element).build().perform();
-        Sleep(POST_ACTION_WAIT_DELAY);
+        sleep(POST_ACTION_WAIT_DELAY);
     }
 
     public void hoverElement(String selector) {
@@ -170,7 +170,7 @@ public final class WebOperations {
             throw new IllegalStateException("Can't click element because it's not accessible: " + element);
         }
         actions.moveToElement(element).click().build().perform();
-        Sleep(POST_ACTION_WAIT_DELAY);
+        sleep(POST_ACTION_WAIT_DELAY);
     }
 
     public void clickElement(String selector) {
@@ -211,6 +211,18 @@ public final class WebOperations {
         return getElementAttribute(parentSelector, selector, "innerHTML");
     }
 
+    public void scroll(int xOffset, int yOffset) {
+        executeScript("window.scrollBy(" + xOffset + ", " + yOffset + ");");
+    }
+
+    public void scrollToElement(String selector) {
+        WebElement element = getElement(selector);
+        if (element == null) {
+            throw new IllegalStateException("Can't scroll to not existing element");
+        }
+        executeScript("arguments[0].scrollIntoView();", element);
+    }
+
     public Object executeScript(String script, Object... args) {
         JavascriptExecutor je = (JavascriptExecutor) driver;
         if (je == null) {
@@ -219,7 +231,7 @@ public final class WebOperations {
         return je.executeScript(script, args);
     }
 
-    public void Sleep(long milliseconds) {
+    public void sleep(long milliseconds) {
         try {
             Thread.sleep(milliseconds);
         } catch (InterruptedException ignored) {

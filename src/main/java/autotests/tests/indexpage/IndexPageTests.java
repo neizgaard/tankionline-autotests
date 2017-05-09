@@ -128,19 +128,19 @@ public class IndexPageTests {
     //endregion
 
     @Parameters({"browserName", "version", "platformName"})
-    @BeforeClass
+    @BeforeClass()
     public void initBrowsersData(@NotNull String browserName, @Optional String version, @Optional String platformName) {
         this.browserName = browserName;
         this.version = version;
         this.platformName = platformName;
     }
 
-    @BeforeMethod
+    @BeforeMethod()
     public void openBrowser() {
         BrowserInstancesManager.setInstance(new BrowserInstance(browserName, version, platformName));
     }
 
-    @AfterMethod
+    @AfterMethod()
     public void closeBrowser() {
         BrowserInstancesManager.getBrowserInstance().close();
     }
@@ -249,25 +249,23 @@ public class IndexPageTests {
     @Test(dataProvider = "allLocales")
     public void testNewsVisible(Locale locale) {
         IndexPage indexPage = IndexPage.open(locale, BrowserInstancesManager.getBrowserInstance());
-        indexPage.scrollDown();
+        indexPage.getNews().scrollToElement();
         List<News> news = indexPage.getNews().getNews();
         Assert.assertTrue(!news.isEmpty(), "There is no news available");
         boolean result = news.get(0).isVisible() && news.get(1).isVisible() && news.get(2).isVisible();
         Assert.assertTrue(result, "Last 3 news are not visible");
     }
 
-    @Test(dependsOnMethods = "testNewsVisible", dataProvider = "allLocales")
+    @Test(dataProvider = "allLocales")
     public void testNewsScrolling(Locale locale) {
         IndexPage indexPage = IndexPage.open(locale, BrowserInstancesManager.getBrowserInstance());
-        indexPage.scrollDown();
         NewsBlock newsBlock = indexPage.getNews();
+        newsBlock.scrollToElement();
         List<News> news = newsBlock.getNews();
-
         newsBlock.getNextButton().click();
         boolean lastNews = news.get(0).isNotVisible() && news.get(1).isNotVisible() && news.get(2).isNotVisible();
         boolean nextNews = news.get(3).isVisible() && news.get(4).isVisible() && news.get(5).isVisible();
         Assert.assertTrue(lastNews && nextNews, "News previous button does not work as expected");
-
         newsBlock.getPreviousButton().click();
         lastNews = news.get(0).isVisible() && news.get(1).isVisible() && news.get(2).isVisible();
         nextNews = news.get(3).isNotVisible() && news.get(4).isNotVisible() && news.get(5).isNotVisible();
@@ -277,14 +275,14 @@ public class IndexPageTests {
     @Test(dataProvider = "mainLocales")
     public void testVideoBlogVisible(Locale locale) {
         IndexPage indexPage = IndexPage.open(locale, BrowserInstancesManager.getBrowserInstance());
-        indexPage.scrollDown();
+        indexPage.getVideo().scrollToElement();
         Assert.assertTrue(indexPage.getVideo().isNotStarted(), "Video blog is not visible");
     }
 
     @Test(dataProvider = "mainLocales")
     public void testVideoBlogPlayable(Locale locale) {
         IndexPage indexPage = IndexPage.open(locale, BrowserInstancesManager.getBrowserInstance());
-        indexPage.scrollDown(2);
+        indexPage.getVideo().scrollToElement();
         indexPage.getVideo().clickVideo();
         Assert.assertTrue(indexPage.getVideo().isPlay(), "Video blog play is not stated");
     }
@@ -292,7 +290,7 @@ public class IndexPageTests {
     @Test(dataProvider = "germanSpecific")
     public void testUSKLogoVisible(Locale locale) {
         IndexPage indexPage = IndexPage.open(locale, BrowserInstancesManager.getBrowserInstance());
-        indexPage.scrollDown();
+        indexPage.getFooter().scrollToElement();
         Assert.assertTrue(indexPage.getFooter().getUsk().isVisible(), "USK logo is not visible");
     }
 
@@ -301,7 +299,7 @@ public class IndexPageTests {
         SoftAssert softAssert = new SoftAssert();
         for (AgreementType agreement : agreements) {
             IndexPage indexPage = IndexPage.open(locale, BrowserInstancesManager.getBrowserInstance());
-            indexPage.scrollDown(2);
+            indexPage.getFooter().scrollToElement();
             AbstractPage page = (AbstractPage) indexPage.getFooter().getAgreements().get(agreement).click();
             softAssert.assertTrue(page.isOpen(), agreement + " page is not opened");
         }
@@ -311,7 +309,7 @@ public class IndexPageTests {
     @Test(dataProvider = "socialNetworks")
     public void testSocialNetworkButtons(Locale locale, SocialNetworkType... socials) {
         IndexPage indexPage = IndexPage.open(locale, BrowserInstancesManager.getBrowserInstance());
-        indexPage.scrollDown();
+        indexPage.getFooter().scrollToElement();
         SoftAssert softAssert = new SoftAssert();
         for (SocialNetworkType social : socials) {
             softAssert.assertTrue(indexPage.getFooter().getSocials().getSocials().get(social).isVisible(),

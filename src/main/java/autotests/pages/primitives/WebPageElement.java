@@ -43,4 +43,8 @@ public class WebPageElement {
     public String getText() {
         return getAttribute("innerHTML");
     }
+
+    public void scrollToElement() {
+        instance.getWebOperations().scrollToElement(selector);
+    }
 }

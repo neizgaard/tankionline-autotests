@@ -1,6 +1,5 @@
 package autotests.pages.primitives;
 
-import autotests.configs.TestConfigs;
 import autotests.core.BrowserInstance;
 
 public abstract class AbstractPage {
@@ -51,30 +50,5 @@ public abstract class AbstractPage {
             return suffix;
         }
         return getAbsoluteUrl();
-    }
-
-    public AbstractPage scrollUp(int scrollTimes) {
-        int offset = -TestConfigs.getDefaultViewportSize().getHeight() * scrollTimes;
-        scroll(0, offset);
-        return this;
-    }
-
-    public AbstractPage scrollUp() {
-        return scrollUp(1);
-    }
-
-    public AbstractPage scrollDown(int scrollTimes) {
-        int offset = TestConfigs.getDefaultViewportSize().getHeight() * scrollTimes;
-        scroll(0, offset);
-        return this;
-    }
-
-    public AbstractPage scrollDown() {
-        return scrollDown(1);
-    }
-
-    public AbstractPage scroll(int xOffset, int yOffset) {
-        instance.getWebOperations().executeScript("window.scrollBy(" + xOffset + ", " + yOffset + ");");
-        return this;
     }
 }

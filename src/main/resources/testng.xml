@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Tanki Online" parallel="methods" thread-count="5" verbose="1" configfailurepolicy="continue" data-provider-thread-count="1">
 
-    <test name="Index_Page_Tests">
+    <test name="Index Page Tests">
         <parameter name="browserName" value="chrome"/>
         <classes>
             <class name="autotests.tests.indexpage.IndexPageTests"/>
