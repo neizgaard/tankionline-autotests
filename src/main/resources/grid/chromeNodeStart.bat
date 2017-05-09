@@ -1,0 +1,1 @@
+java -jar selenium-server-standalone-3.4.0.jar -role node -hub http://0.0.0.0:25000/grid/register -port 25001 -browser browserName=chrome,maxInstances=10
