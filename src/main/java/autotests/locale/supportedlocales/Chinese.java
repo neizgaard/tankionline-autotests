@@ -1,6 +1,6 @@
 package autotests.locale.supportedlocales;
 
-import autotests.configs.TestConfigs;
+import autotests.core.configs.TestConfigs;
 import autotests.locale.AbstractLocale;
 import autotests.locale.Locale;
 
